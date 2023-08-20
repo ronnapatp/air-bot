@@ -1,0 +1,28 @@
+name: Generate
+
+on: [push] 
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: node scrapper/index.js
+      - run: node scrapper/pdf.js
+      - run: echo "Success"
+      
+
+      - name: Commit README
+        run: |
+          git config user.email "ronnapatp@users.noreply.github.com"
+          git config user.name "ronnapatp"
+
+
+          git config --list
+
+          git add .
+          git commit -m "Update RATCHAKITCHA"
+          git push --all -f https://${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git
